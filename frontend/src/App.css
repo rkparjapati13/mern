@@ -1,0 +1,575 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input,
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #f4f4f4;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+button {
+  margin-right: 10px;
+}
+.submit-btn {
+  margin-top: 10px;
+}
+.error-message {
+  color: #d9534f; /* Bootstrap red color or use your preferred color */
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block; /* Ensures the error message is displayed on a new line */
+}
+
+/* Container for the form and post list */
+.post-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+/* Form group for spacing */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* Input fields */
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* Error state for input fields */
+input.error, textarea.error, select.error {
+  border-color: #d9534f;
+}
+
+/* Error message styling */
+.error-message {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Submit button */
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Hover effect for submit button */
+.submit-button:hover {
+  background-color: #4cae4c;
+}
+
+/* Post list styling */
+.post-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+/* Individual post items */
+.post-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+/* Post title */
+.post-item h3 {
+  margin: 0 0 10px 0;
+}
+
+/* Buttons inside post items */
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Edit button styling */
+.edit-button {
+  background-color: #5bc0de;
+  color: white;
+}
+
+/* Delete button styling */
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Hover effects for edit and delete buttons */
+.edit-button:hover {
+  background-color: #31b0d5;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+/* Container for the comments form and list */
+.comments-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+/* Form group for spacing */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* Input fields */
+textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+/* Error state for input fields */
+textarea.error, select.error {
+  border-color: #d9534f;
+}
+
+/* Error message styling */
+.error-message {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Submit button */
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Hover effect for submit button */
+.submit-button:hover {
+  background-color: #4cae4c;
+}
+
+/* Comments list styling */
+.comments-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+/* Individual comment items */
+.comment-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+/* Comment content */
+.comment-item h4 {
+  margin: 0 0 5px 0;
+}
+
+/* Comment post title */
+.comment-item p {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Buttons inside comment items */
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Edit button styling */
+.edit-button {
+  background-color: #5bc0de;
+  color: white;
+}
+
+/* Delete button styling */
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Hover effects for edit and delete buttons */
+.edit-button:hover {
+  background-color: #31b0d5;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700");
+
+/* VARIABLES */
+:root {
+    --large-width: 768px;
+    --medium-width-max: 767px;
+    --medium-width-min: 480px;
+    --spacing-x: 1.2rem;
+    --spacing-y: 0.75rem;
+    --post-color: #0f0f0f;
+    --post-background-color: #ffffff;
+    --post-header-background-color: rgba(0, 0, 0, 0.075);
+    --post-button-hover-background-color: rgba(0, 0, 0, 0.05);
+    --light-color: #8a8a8a;
+    --border-color: #dadada;
+    --input-color: #efefef;
+}
+
+/* DARK MODE */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --post-color: #ffffff;
+        --post-background-color: #242424;
+        --post-header-background-color: rgba(255, 255, 255, 0.05);
+        --post-button-hover-background-color: rgba(255, 255, 255, 0.1);
+        --light-color: #8a8a8a;
+        --border-color: #3f3f3f;
+        --input-color: #3b3b3b;
+    }
+}
+
+/* STYLES */
+#app {
+    font-family: "Open Sans", sans-serif;
+    background-image: linear-gradient(-45deg, #3084ff, #1dbdff);
+    width: 100vw;
+    height: 100vh;
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.post {
+    color: var(--post-color);
+    background-color: var(--post-background-color);
+    width: 100%;
+    max-width: var(--large-width);
+    margin: auto;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    margin-bottom: 20px;
+    box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.7);
+}
+
+.post h1,
+.post h2,
+.post h3,
+.post h4,
+.post h5,
+.post h6,
+.post p {
+    padding: 0;
+    margin: 0;
+}
+
+.post-header {
+    background-color: var(--post-header-background-color);
+    padding: var(--spacing-y) var(--spacing-x);
+    border-bottom: solid 1px var(--border-color);
+}
+
+.post-top {
+    color: var(--light-color);
+    padding: var(--spacing-y) var(--spacing-x);
+    display: flex;
+}
+
+.post-identifier {
+    padding-top: var(--spacing-y);
+}
+
+.post-identifier p:first-child {
+    margin-bottom: 0.25rem;
+}
+
+.post-avatar figure {
+    --size: 5em;
+    background-color: #ffffff;
+    width: var(--size);
+    height: var(--size);
+    border: solid 1px var(--border-color);
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+}
+
+.post-avatar figure img {
+    width: 100%;
+    vertical-align: top;
+}
+
+.post-author-link {
+    color: #3f8bef;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 64ms ease-out;
+}
+
+.post-author-link:hover {
+    color: #1f6bcf;
+}
+
+.post-content {
+    padding: 0 var(--spacing-x) var(--spacing-y);
+    border-bottom: solid 1px var(--border-color);
+    position: relative;
+}
+
+.content-reactions {
+    color: var(--light-color);
+    padding-top: var(--spacing-y) !important;
+}
+
+.post-commands {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-react-popup {
+    background-color: var(--post-background-color);
+    width: calc(100% - var(--spacing-x) * 2);
+    padding: calc(var(--spacing-y) / 2) 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    position: absolute;
+    left: var(--spacing-x);
+    bottom: -0.5rem;
+    box-sizing: border-box;
+    box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.7);
+    border-radius: 1rem;
+    animation: show 128ms linear;
+}
+
+.post-react-popup.hiding {
+    animation: hide 128ms linear;
+}
+
+@keyframes show {
+    0% {
+        opacity: 0;
+        transform: translateY(100%) scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes hide {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100%) scale(0);
+    }
+}
+
+
+.post-button {
+    font-family: inherit;
+    color: inherit;
+    background-color: transparent;
+    width: 100%;
+    height: 3.1rem;
+    padding: 0.75rem 2.75rem;
+    border: 0;
+    border-bottom: solid 1px var(--border-color);
+    border-radius: 0;
+    box-sizing: border-box;
+    transition: background-color 64ms ease-out;
+}
+
+.post-button:hover,
+.post-button:focus {
+    background-color: var(--post-button-hover-background-color);
+}
+
+.post-button:last-child {
+    border-bottom: 0;
+}
+
+.post-button > span {
+    margin-left: 0.5rem;
+}
+
+.post-comments {
+    padding: var(--spacing-y) 0;
+    border-top: solid 1px var(--border-color);
+    box-sizing: border-box;
+}
+
+.comment-container {
+    width: 100%;
+    padding: var(--spacing-y) var(--spacing-x);
+    border-bottom: solid 1px var(--border-color);
+    box-sizing: border-box;
+}
+
+.comment-container:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.comment-top {
+    padding-bottom: var(--spacing-y);
+    display: flex;
+}
+
+.comment-top .post-avatar figure {
+    --size: 2rem;
+}
+
+.comment-top .post-identifier {
+    padding-top: 0;
+    color: var(--light-color);
+}
+
+.comment-input {
+    color: #ffffff;
+    padding: 0 var(--spacing-x) var(--spacing-y);
+    border-bottom: solid 1px var(--border-color);
+    display: flex;
+}
+
+.comment-input .post-avatar figure {
+    --size: 2rem;
+}
+
+.text-comment {
+    color: var(--post-color);
+    font-family: inherit;
+    background-color: var(--input-color);
+    width: 100%;
+    padding: calc(var(--spacing-y) / 2) calc(var(--spacing-x) / 2);
+    border: 0;
+    margin: 0 calc(var(--spacing-x) / 2);
+    outline: 0;
+    resize: none;
+    box-sizing: border-box;
+    border-radius: 1rem;
+}
+
+.send-button {
+    color: #ffffff;
+    background-color: #388bff;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    flex-shrink: 0;
+    border-radius: 50%;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.2);
+    transition: background-color 64ms ease-out;
+}
+
+.send-button:hover,
+.send-button:focus {
+    background-color: #5aadff;
+}
+
+.send-button:active {
+    background-color: #1669ff;
+}
+
+.spinner-container {
+    text-align: center;
+    width: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+    box-sizing: border-box;
+}
