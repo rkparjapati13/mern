@@ -7,8 +7,11 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import imageLink from '../user.png';
 import moment from 'moment';
+import { useApiCall } from "../services/api";
+import { toast } from 'react-toastify';
 
 const Posts = () => {
+    const { apiCall } = useApiCall();
 
     const formatDate = (date) => {
         return moment(date).format('YYYY MMM DD HH:mm');
@@ -32,10 +35,15 @@ const Posts = () => {
         fetchPosts();
         fetchUsers();
     }, []);
+    
     const fetchPosts = async () => {
-        const response = await axios.get('/api/posts');
-        setPosts(response.data);
+        const response = await apiCall("get", "/api/posts");
+        const data = await response;
+        if (data && data.posts) {
+            setPosts(data.posts);
+        }
     };
+
     const validateForm = () => {
         let valid = true;
         const newErrors = {};
@@ -58,10 +66,15 @@ const Posts = () => {
 
         return valid;
     };
+
     const fetchUsers = async () => {
-        const response = await axios.get('/api/users');
-        setUsers(response.data);
+        const response = await apiCall("get", "/api/users");   
+        const data = await response;     
+        if (data && data.users) {
+            setUsers(data.users);
+        }
     };
+
     const handleChange = async (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -73,37 +86,39 @@ const Posts = () => {
             [name]: '',
         }));
     };
+
     const createPost = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            const response = await axios.post('/api/posts', formData);
+        if (validateForm()) {        
+            const response = await apiCall("post", '/api/posts', formData);
             if (response.status == 201) {
-                console.log(response.data);
                 setFormData({
                     title: '',
                     content: '',
                     user: '',
                 })
             }
+            toast.success(response.message);
         }
-
         fetchPosts();
     };
 
     const updatePost = async (id) => {
         if (!validateForm()) return false;
-        await axios.put(`/api/posts/${id}`, formData);
+        const response = await apiCall("put", `/api/posts/${id}`, formData);
         setEditingPost(null);
         setFormData({
             title: '',
             content: '',
             user: '',
         })
+        toast.success(response.message);
         fetchPosts();
     };
 
     const deletePost = async (id) => {
-        await axios.delete(`/api/posts/${id}`);
+        const response = await apiCall("delete", `/api/posts/${id}`);
+        toast.success(response.message);
         fetchPosts();
     };
 

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useApiCall } from "../services/api";
+import { toast } from 'react-toastify';
 
 const Comments = () => {
+    const { apiCall } = useApiCall();
+
     const [comments, setComments] = useState([]);
     const [posts, setPosts] = useState([]);
     const [formData, setFormData] = useState({
@@ -20,14 +22,7 @@ const Comments = () => {
         fetchComments();
         fetchPosts();
     }, []);
-    const fetchPosts = async () => {
-        const response = await axios.get('/api/posts');
-        setPosts(response.data);
-    };
-    const fetchComments = async () => {
-        const response = await axios.get('/api/comments');
-        setComments(response.data);
-    };
+    
     const validateForm = () => {
         let valid = true;
         const newErrors = {};
@@ -64,10 +59,20 @@ const Comments = () => {
             }));
         }
     };
+    const fetchPosts = async () => {
+        const response = await apiCall("get", "/api/posts");
+        setPosts(response.posts);
+    };
+
+    const fetchComments = async () => {
+        const response = await apiCall("get", "/api/comments");
+        setComments(response.comments);
+    };
+
     const createComment = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            const response = await axios.post('/api/comments', formData);
+            const response = await apiCall("post", '/api/comments', formData);
             if (response.status == 201) {
                 console.log(response.data);
                 setFormData({
@@ -83,7 +88,7 @@ const Comments = () => {
 
     const updateComment = async (id) => {
         if (!validateForm()) return false;
-        await axios.put(`/api/comments/${id}`, formData);
+        await apiCall("put", `/api/comments/${id}`, formData);
         setEditingComment(null);
         setFormData({
             post: '',
@@ -94,7 +99,8 @@ const Comments = () => {
     };
 
     const deleteComment = async (id) => {
-        await axios.delete(`/api/comments/${id}`);
+        const response = await apiCall("delete", `/api/comments/${id}`);
+        toast.success(response.message);
         fetchComments();
     };
 
