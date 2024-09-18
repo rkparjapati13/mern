@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
-import { useApiCall } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { getUsersAsync, createUserAsync, deleteUserAsync, updateUserAsync } from "../store/slices/userSlice";
 
 const Users = () => {
-  const { apiCall } = useApiCall();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state?.users?.users);
+  const loading = useSelector((state) => state?.users?.loading);
 
-  const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,10 +47,6 @@ const Users = () => {
     return valid;
   };
 
-  useEffect(() => {
-    fetchUsers(); 
-  }, []);
-
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,7 +55,6 @@ const Users = () => {
       [name]: value,
     }));
     
-    // Set password to "password" when the email changes
     if (name === "email") {
       setFormData((prevData) => ({
         ...prevData,
@@ -73,57 +68,35 @@ const Users = () => {
     }));
   };
 
-  // Fetch users
-  const fetchUsers = async () => {
-    try {
-      const response = await apiCall("get", "/api/users");
-      if (response && response.users) {
-        setUsers(response.users);
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      // if (error.response && error.response.status === 401) {
-      //   alert("Your session has expired. Please log in again.");
-      // } else {
-      //   alert("An error occurred while fetching users.");
-      // }
-      navigate('/login');
-
-    }
-  };
-
   // Create user
   const createUser = async () => {
     if (validateForm()) {
       try {
-        const response = await apiCall("post", "/api/users", formData);
-        toast.success(response.message);
+        dispatch(createUserAsync(formData));
+        toast.success('User created successfully!');
         setFormData({
           name: "",
           email: "",
           password: "",
         });
-        fetchUsers();
       } catch (error) {
-        console.error("Error creating user:", error);
         toast.error("Failed to create user.");
       }
     }
   };
 
   // Update user
-  const updateUser = async (id) => {
+  const updateUser = async (id, formData) => {
     if (validateForm()) {
       try {
-        const response = await apiCall("put", `/api/users/${id}`, formData);
+        dispatch(updateUserAsync(id, formData));
         setEditingUser(null);
         setFormData({
           name: "",
           email: "",
           password: "",
         });
-        toast.success(response.message);
-        fetchUsers();
+        toast.success('User updated successfully');
       } catch (error) {
         console.error("Error updating user:", error);
         toast.error("Failed to update user.");
@@ -134,9 +107,8 @@ const Users = () => {
   // Delete user
   const deleteUser = async (id) => {
     try {
-      const response = await apiCall("delete", `/api/users/${id}`);
-      toast.success(response.message);
-      fetchUsers();
+      dispatch(deleteUserAsync(id));
+      toast.success('User deleted successfully');
     } catch (error) {
       console.error("Error deleting user:", error);
       toast.error("Failed to delete user.");
@@ -149,7 +121,7 @@ const Users = () => {
     setFormData({
       name: user.name,
       email: user.email,
-      password: user.email,
+      password: "password",
     });
   };
 
@@ -161,8 +133,12 @@ const Users = () => {
 
   const handleUpdateUser = (e) => {
     e.preventDefault();
-    updateUser(editingUser);
+    updateUser(editingUser, formData);
   };
+
+  useEffect(() => {
+    dispatch(getUsersAsync());
+  }, [dispatch]);
 
   return (
     <div>
@@ -198,26 +174,38 @@ const Users = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {users.length > 0 ? (
-            users.map((user) => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button onClick={() => startEditing(user)}>Edit</button>
-                  <button onClick={() => deleteUser(user._id)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          ) : (
+        {loading ? (
+          <tbody>
             <tr>
-              <td colSpan={3} style={{ textAlign: "center" }}>
-                Data not found
+              <td colSpan="3" className="text-center">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </td>
             </tr>
-          )}
-        </tbody>
+          </tbody>
+        ) : (
+          <tbody>
+            {users?.length > 0 ? (
+              users.map((user) => (
+                <tr key={user?._id}>
+                  <td>{user?.name}</td>
+                  <td>{user?.email}</td>
+                  <td>
+                    <button onClick={() => startEditing(user)}>Edit</button>
+                    <button onClick={() => deleteUser(user?._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} style={{ textAlign: "center" }}>
+                  Data not found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        )}
       </table>
     </div>
   );
