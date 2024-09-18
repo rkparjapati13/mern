@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
+// const authRoutes = require('./routes/authRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const oauthMiddleware = require('./middleware/oauthMiddleware');
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use('/api/users', oauthMiddleware, userRoutes);
 app.use('/api/posts', oauthMiddleware, postRoutes);
 app.use('/api/comments', oauthMiddleware, commentRoutes);
+// app.use('/api/auth', authRoutes);
 
 // Start the server
 app.listen(PORT, () => {

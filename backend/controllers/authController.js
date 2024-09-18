@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: existingUser._id }, jwtSecret, {
-      expiresIn: '1m',
+      expiresIn: '1h',
     });
 
     res.status(200).json({
@@ -34,20 +34,6 @@ exports.login = async (req, res) => {
         email: existingUser.email,
       },
       token: token
-    });
-  } catch (error) {
-    console.error("Login error:", error.message);
-    res.status(500).json({ error: "An error occurred during login" });
-  }
-};
-
-exports.loginAuthO = async (req, res) => {
-  try {
-    
-
-    res.status(200).json({
-      message: "Login successful",
-      token: response.data.access_token, // Returning the token or any other relevant info
     });
   } catch (error) {
     console.error("Login error:", error.message);
