@@ -1,50 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from './UserContext';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+
 
 const Users = () => {
+    const { user } = useContext(UserContext);
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
+        role: ''
     });
     const [errors, setErrors] = useState({
         name: '',
-        email: ''
+        email: '',
+        role: ''
     });
     const validateForm = () => {
         let valid = true;
         const newErrors = {};
         if (!formData.name) {
-          newErrors.name = 'Name is required';
-          valid = false;
-        } else if(formData.name.length > 20) {
-          newErrors.name = 'Name should not exceed 20 characters.';
-          valid = false;
+            newErrors.name = 'Name is required';
+            valid = false;
+        } else if (formData.name.length > 20) {
+            newErrors.name = 'Name should not exceed 20 characters.';
+            valid = false;
         } else if (!/^[a-zA-Z\s]+$/.test(formData.name)) {
-          newErrors.name = 'Name can only contain letters and spaces.';
-          valid = false;
+            newErrors.name = 'Name can only contain letters and spaces.';
+            valid = false;
         }
-    
-    
+
+
         if (!formData.email) {
-          newErrors.email = 'Email is required';
-          valid = false;
+            newErrors.email = 'Email is required';
+            valid = false;
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = 'Email is invalid';
-          valid = false;
+            newErrors.email = 'Email is invalid';
+            valid = false;
+        }
+        if (!formData.role) {
+            newErrors.role = 'Role is required';
+            valid = false;
         }
         setErrors(newErrors);
         return valid;
-      };
+    };
     const [editingUser, setEditingUser] = useState(null);
-
     useEffect(() => {
         fetchUsers();
     }, []);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value);
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -61,19 +71,20 @@ const Users = () => {
         }));
     };
     const fetchUsers = async () => {
-        const response = await axios.get('/api/users');
+        const response = await api.get('/users');
         setUsers(response.data);
     };
 
     const createUser = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            const response  = await axios.post('/api/users', formData);
+            const response = await api.post('/users', formData);
             console.log(response.data);
             setFormData({
                 name: '',
                 email: '',
                 password: '',
+                role: ''
             })
         }
         fetchUsers();
@@ -81,18 +92,19 @@ const Users = () => {
 
     const updateUser = async (id) => {
         console.log('update', id, formData);
-        await axios.put(`/api/users/${id}`, formData);
+        await api.put(`/users/${id}`, formData);
         setEditingUser(null);
         setFormData({
             name: '',
             email: '',
             password: '',
+            role: ''
         })
         fetchUsers();
     };
 
     const deleteUser = async (id) => {
-        await axios.delete(`/api/users/${id}`);
+        await api.delete(`/users/${id}`);
         fetchUsers();
     };
 
@@ -101,8 +113,9 @@ const Users = () => {
         setFormData({
             name: user.name,  // Ensure this sets the correct user ID
             email: user.email,  // Ensure this sets the correct user ID
-            password: user.email  // Ensure this sets the correct user ID
-          });
+            password: user.email,  // Ensure this sets the correct user ID
+            role: user.role
+        });
     };
 
 
@@ -125,6 +138,16 @@ const Users = () => {
                 onChange={handleChange}
             />
             {errors.email && <div className="error-message">{errors.email}</div>}
+            {user && user.role === 'SuperAdmin' ? (
+                <select name="role" value={formData.role} onChange={handleChange}>
+                    <option value=""> --- Select a role --- </option>
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            ) : (
+                <input type="text" value="User" name="role" disabled />
+            )}
+            {errors.role && <div className="error-message">{errors.role}</div>}
             <button className="submit-btn" onClick={editingUser ? () => updateUser(editingUser) : createUser}>
                 {editingUser ? 'Update User' : 'Add User'}
             </button>
@@ -149,7 +172,7 @@ const Users = () => {
                         </tr>
                     )) : (
                         <tr>
-                            <td colSpan={3} style={{textAlign :'center'}}>Data not found</td>
+                            <td colSpan={3} style={{ textAlign: 'center' }}>Data not found</td>
                         </tr>
                     )
                     }

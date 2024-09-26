@@ -3,18 +3,50 @@ const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
 
 exports.createUser = async (req, res) => {
+  const { name, email, role } = req.body;
+
+  // Ensure admins cannot create super admins
+  if (req.user.role === 'Admin' && role === 'SuperAdmin') {
+    return res.status(403).json({ message: "Admins can't create Super Admins" });
+  }
+  if (req.user.role === 'Admin' && role === 'Admin') {
+    return res.status(403).json({ message: "Admins can't create Admins" });
+  }
+
   try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json(user);
+    const newUser = new User({ name, email, role });
+    await newUser.save();
+    res.status(201).json({ message: 'User created successfully', newUser });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    // const users = await User.find();
+    const { role } = req.user; // Assuming req.user contains the authenticated user's details
+
+    let users;
+    if (role === 'SuperAdmin') {
+      // Super admin can see all users
+      users = await User.find({ role: { $ne: 'SuperAdmin' } }); // Exclude superadmin
+    } else if (role === 'Admin') {
+      // Admin can see only regular users
+      users = await User.find({ role: { $eq: 'User' } }); // Exclude superadmin
+    } else {
+      return res.status(403).json({ message: 'Access denied' }); // If the user is neither
+    }
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const id = req.user?.id;
+    const users = await User.find({ _id: { $ne: id } }); // Exclude superadmin
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });

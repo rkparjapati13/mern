@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 
 const Comments = () => {
@@ -21,11 +21,11 @@ const Comments = () => {
         fetchPosts();
     }, []);
     const fetchPosts = async () => {
-        const response = await axios.get('/api/posts');
+        const response = await api.get('/posts');
         setPosts(response.data);
     };
     const fetchComments = async () => {
-        const response = await axios.get('/api/comments');
+        const response = await api.get('/comments');
         setComments(response.data);
     };
     const validateForm = () => {
@@ -67,7 +67,7 @@ const Comments = () => {
     const createComment = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-            const response = await axios.post('/api/comments', formData);
+            const response = await api.post('/comments', formData);
             if (response.status == 201) {
                 console.log(response.data);
                 setFormData({
@@ -83,7 +83,7 @@ const Comments = () => {
 
     const updateComment = async (id) => {
         if (!validateForm()) return false;
-        await axios.put(`/api/comments/${id}`, formData);
+        await api.put(`/comments/${id}`, formData);
         setEditingComment(null);
         setFormData({
             post: '',
@@ -94,7 +94,7 @@ const Comments = () => {
     };
 
     const deleteComment = async (id) => {
-        await axios.delete(`/api/comments/${id}`);
+        await api.delete(`/comments/${id}`);
         fetchComments();
     };
 

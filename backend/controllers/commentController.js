@@ -2,9 +2,17 @@ const Comment = require('../models/commentModel');
 
 exports.createComment = async (req, res) => {
   try {
-    const comment = new Comment(req.body);
+    let user = req.user?.id;
+    if (!user) {
+      res.status(400).json({ error: 'User not found' });
+    }
+    const { post, text } = req.body;
+    const comment = new Comment({post, text, user});
     await comment.save();
-    res.status(201).json(comment);
+    const populatedComment = await Comment.findById(comment._id)
+      .populate('user')
+      .populate('post');
+    res.status(201).json(populatedComment);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -12,7 +20,7 @@ exports.createComment = async (req, res) => {
 
 exports.getComments = async (req, res) => {
   try {
-    const comments = await Comment.find().populate('user').populate('post');
+    const comments = await Comment.find().populate('user').populate('post').sort({ createdAt: -1 });
     res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -29,7 +37,7 @@ exports.getCommentsOfPost = async (req, res) => {
       }
   
       // Find comments associated with the specified post ID
-      const comments = await Comment.find({ post: postId }).populate('user').populate('post');
+      const comments = await Comment.find({ post: postId }).populate('user').populate('post').sort({ createdAt: -1 });
   
       // Respond with the list of comments
       res.status(200).json(comments);

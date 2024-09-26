@@ -4,6 +4,18 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
-export const fetchData = async () => {
-  return await api.get('/users');
-};
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`; // Set the token in the headers
+      // config.headers['ngrok-skip-browser-warning'] = true;
+    }
+    return config; // Return the modified config
+  },
+  (error) => {
+    return Promise.reject(error); // Handle the error
+  }
+);
+
+export default api;
