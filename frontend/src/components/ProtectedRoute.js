@@ -1,21 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { UserContext } from './UserContext'; // Assuming you have a context for user data
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user, loading } = useContext(UserContext);
-
-  console.log('asdfasdfasdf', user);
-
-  if (!user && !loading) {
-    return <Navigate to="/login" replace />; // Redirect if no user
+  const {isAuthenticated, user} = useSelector((state) => state.auth); // Get user from Redux store
+  const userRole = user?.user.role;
+  // If there are allowed roles and the user role is not permitted, navigate to login
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/login" />;
   }
 
-  if (allowedRoles && !loading && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />; // Redirect if user role is not allowed
+  // // If no user, navigate to login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
   }
-
-  return children; // Render the protected route
+  return children;  // Render protected content
 };
 
 export default ProtectedRoute;

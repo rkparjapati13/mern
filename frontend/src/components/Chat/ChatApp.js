@@ -7,7 +7,7 @@ import '../../css/ChatApp.css';
 import api from '../../services/api';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 
 const ChatApp = () => {
     const [messages, setMessages] = useState([]);
@@ -16,22 +16,22 @@ const ChatApp = () => {
 
     useEffect(() => {
         // Listen for incoming messages
-        socket.on('message', (message) => {
+        // socket.on('message', (message) => {
 
-            if (selectedUser && message.from === selectedUser._id) {
-                console.log('message aaya', message);
-                const modifiedMessage = {
-                    ...message,
-                    senderRole: 'other',
-                };
-                setMessages((prevMessages) => [...prevMessages, modifiedMessage]);
-            }
-        });
+        //     if (selectedUser && message.from === selectedUser._id) {
+        //         console.log('message aaya', message);
+        //         const modifiedMessage = {
+        //             ...message,
+        //             senderRole: 'other',
+        //         };
+        //         setMessages((prevMessages) => [...prevMessages, modifiedMessage]);
+        //     }
+        // });
 
-        // Cleanup listener on component unmount
-        return () => {
-            socket.off('message');
-        };
+        // // Cleanup listener on component unmount
+        // return () => {
+        //     socket.off('message');
+        // };
     }, [selectedUser]);
     useEffect(() => {
         if (chatEndRef.current) {
@@ -57,7 +57,7 @@ const ChatApp = () => {
             // Optionally, save the message to the database
             const response = await api.post('/messages', messageData);
             if (response.status === 201) {
-                socket.emit('message', response.data);
+                // socket.emit('message', response.data);
                 // You can update state with the message here if needed
                 setMessages((prevMessages) => [...prevMessages, response.data]);
             }
@@ -87,7 +87,6 @@ const ChatApp = () => {
                             <>
                                 <ChatHeader user={selectedUser} />
                                 <ChatHistory messages={messages} chatEndRef={chatEndRef} />
-                                {/* Reference div for scrolling */}
                                 {/* <div ref={chatEndRef} /> */}
                                 <ChatInput onSendMessage={handleSendMessage} />
                             </>

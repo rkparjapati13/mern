@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 import moment from 'moment';
 import '../css/chat.css'; // Import styles for the chat UI
 
-const socket = io('http://localhost:5000'); // Connect to your server
+// const socket = io('http://localhost:5000'); // Connect to your server
 
 const Chat = () => {
     const [messages, setMessages] = useState([]); // Store chat messages
@@ -12,14 +12,14 @@ const Chat = () => {
 
     useEffect(() => {
         // When a new message is received from the server
-        socket.on('receive_message', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data]);
-        });
+        // socket.on('receive_message', (data) => {
+        //     setMessages((prevMessages) => [...prevMessages, data]);
+        // });
 
-        // Cleanup event when the component unmounts
-        return () => {
-            socket.off('receive_message');
-        };
+        // // Cleanup event when the component unmounts
+        // return () => {
+        //     socket.off('receive_message');
+        // };
     }, []);
 
     const handleSendMessage = (e) => {
@@ -31,7 +31,7 @@ const Chat = () => {
                 time: moment().format('YYYY-MM-DD HH:mm:ss')
             };
             // Emit message to server
-            socket.emit('send_message', messageData);
+            // socket.emit('send_message', messageData);
             // Add message to the local state
             // setMessages((prevMessages) => [...prevMessages, messageData]);
             setMessage(''); // Clear input field

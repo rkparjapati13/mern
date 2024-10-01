@@ -6,7 +6,7 @@ import moment from 'moment';
 import api from '../services/api'; // Assuming you have an `api` service configured for axios
 import {io} from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 const CommentsSection = ({ postId }) => {
     // console.log('asdfasdfasdfasdfasdfasdasdasdfsdf', postId);
     const [commentList, setComments] = useState([]);
@@ -18,18 +18,18 @@ const CommentsSection = ({ postId }) => {
     useEffect(() => {
         fetchComments(postId);
          // Listen for real-time comments from the server
-         socket.on('receive_comment', (newComment) => {
-            // Only update comments if the comment belongs to the current post
-            if (newComment.post._id == postId) {
-                // fetchComments(postId);
-                setComments((prevComments) => [newComment, ...prevComments]);
-            }
-        });
+        //  socket.on('receive_comment', (newComment) => {
+        //     // Only update comments if the comment belongs to the current post
+        //     if (newComment.post._id == postId) {
+        //         // fetchComments(postId);
+        //         setComments((prevComments) => [newComment, ...prevComments]);
+        //     }
+        // });
 
-        // // Cleanup when the component is unmounted
-        return () => {
-            socket.off('receive_comment');
-        };
+        // // // Cleanup when the component is unmounted
+        // return () => {
+        //     socket.off('receive_comment');
+        // };
     }, [postId]);
 
     const fetchComments = async (postId) => {
@@ -49,7 +49,7 @@ const CommentsSection = ({ postId }) => {
         try {
             const response = await api.post('/comments', formData);
             if (response.status === 201) {
-                socket.emit('new_comment', response.data);
+                // socket.emit('new_comment', response.data);
                 setFormData({ ...formData, text: '' }); // Clear the text field
                 // fetchComments(postId); // Fetch comments again to update the list
             }

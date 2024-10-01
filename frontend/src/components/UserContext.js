@@ -11,6 +11,8 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
+      console.log('yha token khrab kr rh');
+      
       if (token) {
         try {
           const userResponse = await api.get('/get-user');

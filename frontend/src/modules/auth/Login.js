@@ -1,39 +1,35 @@
-import React, { useState,useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequest } from './action';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from './UserContext';
-
 
 const Login = () => {
-  const { user, setUser } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  if (user) {
-    navigate('/');
-  }
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    
-    try {
-      const response = await axios.post('/api/login', { email, password });
-      
-      // Store the JWT token in localStorage
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
-      // Redirect the user to a protected route (e.g., dashboard)
+
+  // Get the error, loading state, and user from Redux
+  const { error, loading, user, isAuthenticated } = useSelector((state) => state.auth);
+  console.log('isAuthenticated', isAuthenticated, user);
+  
+  // Use useEffect to navigate only when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
       navigate('/');
-      
-    } catch (err) {
-      setError('Invalid credentials');
     }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    dispatch(loginRequest({ email, password }));
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      {loading && <p>Loading...</p>}
       
       <form onSubmit={handleLogin}>
         <div className="form-group">
@@ -56,7 +52,7 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>Login</button>
       </form>
     </div>
   );

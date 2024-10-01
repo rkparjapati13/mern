@@ -8,7 +8,7 @@ import { faClock } from '@fortawesome/free-solid-svg-icons';
 import imageLink from '../user.png';
 import moment from 'moment';
 import {io} from 'socket.io-client';
-const socket = io('http://localhost:5000');
+// const socket = io('http://localhost:5000');
 
 const PostPage = () => {
     const [posts, setPosts] = useState([]);
@@ -19,18 +19,18 @@ const PostPage = () => {
     });
     useEffect(() => {
         fetchPosts();
-        socket.on('receive_post', (newPost) => {
-            // Only update comments if the comment belongs to the current post
-            if (newPost._id) {
-                // fetchPosts();
-                setPosts((prevPosts) => [newPost, ...prevPosts]);
-            }
-        });
+        // socket.on('receive_post', (newPost) => {
+        //     // Only update comments if the comment belongs to the current post
+        //     if (newPost._id) {
+        //         // fetchPosts();
+        //         setPosts((prevPosts) => [newPost, ...prevPosts]);
+        //     }
+        // });
 
-        // // Cleanup when the component is unmounted
-        return () => {
-            socket.off('receive_post');
-        };
+        // // // Cleanup when the component is unmounted
+        // return () => {
+        //     socket.off('receive_post');
+        // };
     }, []);
     const fetchPosts = async () => {
         try {
@@ -74,7 +74,7 @@ const PostPage = () => {
             const response = await api.post('/posts', formData);
             if (response.status == 201) {
                 console.log(response.data);
-                socket.emit('new_post', response.data);
+                // socket.emit('new_post', response.data);
                 setFormData({
                     content: '',
                 })
